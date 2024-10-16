@@ -1,0 +1,12 @@
+
+  .glowable-text {
+    color: black;
+  }
+  
+  [glow] .glowable-text {
+    color: var(--glow-color);
+  }
+  .transition-transform {
+    transition: transform 0.5s ease-in-out, scale 0.5s ease-in-out;
+  }
+  

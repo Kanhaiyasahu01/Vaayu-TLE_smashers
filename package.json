@@ -1,0 +1,54 @@
+{
+  "name": "react-tailwind-css-starter-pack",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@codaworks/react-glow": "^1.0.6",
+    "leaflet": "^1.9.4",
+    "leaflet.heat": "^0.2.0",
+    "react": "^18.2.0",
+    "react-d3-speedometer": "^2.2.1",
+    "react-dom": "^18.2.0",
+    "react-horizontal-scrolling-menu": "^7.1.3",
+    "react-hot-toast": "^2.4.1",
+    "react-icons": "^5.3.0",
+    "react-leaflet": "^4.2.1",
+    "react-loader-spinner": "^6.1.6",
+    "react-router-dom": "^6.26.1",
+    "react-scripts": "5.0.1",
+    "react-slick": "^0.30.2",
+    "react-tilt": "^1.0.2",
+    "react-toastify": "^10.0.5",
+    "react-type-animation": "^3.2.0",
+    "rechart": "^0.0.1",
+    "recharts": "^2.12.7",
+    "slick-carousel": "^1.8.1",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.2.7"
+  }
+}
