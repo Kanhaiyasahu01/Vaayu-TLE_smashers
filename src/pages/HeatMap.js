@@ -12,7 +12,7 @@ const fetchAqiData = async (city) => {
   const apiKey = process.env.REACT_APP_API_KEY;
   try {
     const response = await fetch(
-      `http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`
+      `https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`
     );
     const data = await response.json();
     return { ...city, aqi: data.list[0].main.aqi };
