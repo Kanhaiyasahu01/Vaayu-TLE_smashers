@@ -13,6 +13,7 @@ import { WeatherForecastGraph } from '../components/WeatherForecastGraph';
 import toast from 'react-hot-toast';
 import frame from "../assets/Frame.png";
 import { WeatherHealthAdvice } from '../components/WeatherHealthAdvice';
+import { useCallback } from 'react';
 
 export const Home = ({ city, initialLocation, showInitialLocation }) => {
   const API_KEY = process.env.REACT_APP_API_KEY;
@@ -24,17 +25,14 @@ export const Home = ({ city, initialLocation, showInitialLocation }) => {
   const [weatherForecastData, setWeatherForecastData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
-
-  // new 
   const [isAirSelected, setIsAirSelected] = useState(true);
 
   const getOneDayAgoTimestamp = () => {
     const now = new Date();
-    return Math.floor(now.getTime() / 1000) - 24 * 60 * 60; // Subtracting 1 day in seconds
+    return Math.floor(now.getTime() / 1000) - 24 * 60 * 60;
   };
 
-  const fetchCoordinatesByCity = async (city) => {
+  const fetchCoordinatesByCity = useCallback(async (city) => {
     setLoading(true);
     setError(null);
     try {
@@ -60,9 +58,9 @@ export const Home = ({ city, initialLocation, showInitialLocation }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_KEY]);
 
-  const fetchPollutionData = async (lat, lon) => {
+  const fetchPollutionData = useCallback(async (lat, lon) => {
     setLoading(true);
     setError(null);
     try {
@@ -74,17 +72,15 @@ export const Home = ({ city, initialLocation, showInitialLocation }) => {
       }
       const data = await response.json();
       setPollutionData(data);
-      // console.log('Printing Pollution data');
-      // console.log(data);
     } catch (err) {
       setError(err.message);
       setPollutionData(null);
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_KEY]);
 
-  const fetchForecastData = async (lat, lon) => {
+  const fetchForecastData = useCallback(async (lat, lon) => {
     setLoading(true);
     setError(null);
     try {
@@ -96,22 +92,20 @@ export const Home = ({ city, initialLocation, showInitialLocation }) => {
       }
       const data = await response.json();
       setForecastData(data);
-      // console.log('Printing Forecast data');
-      // console.log(data);
     } catch (err) {
       setError(err.message);
       setForecastData(null);
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_KEY]);
 
-  const fetchHistoricalData = async (lat, lon) => {
+  const fetchHistoricalData = useCallback(async (lat, lon) => {
     setLoading(true);
     setError(null);
     try {
-      const endTimestamp = Math.floor(Date.now() / 1000); // Current time in UNIX timestamp
-      const startTimestamp = getOneDayAgoTimestamp(); // 1 day ago from the current time in UNIX timestamp
+      const endTimestamp = Math.floor(Date.now() / 1000);
+      const startTimestamp = getOneDayAgoTimestamp();
 
       const response = await fetch(
         `http://api.openweathermap.org/data/2.5/air_pollution/history?lat=${lat}&lon=${lon}&start=${startTimestamp}&end=${endTimestamp}&appid=${API_KEY}`
@@ -121,19 +115,17 @@ export const Home = ({ city, initialLocation, showInitialLocation }) => {
       }
       const data = await response.json();
       setHistoricalData(data);
-      // console.log('Printing Historical data');
-      // console.log(data);
     } catch (err) {
       setError(err.message);
       setHistoricalData(null);
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_KEY]);
 
-  const fetchWeatherData = async (lat, lon) => {
+  const fetchWeatherData = useCallback(async (lat, lon) => {
     setLoading(true);
-    setError(null); // Reset error
+    setError(null);
     try {
       const response = await fetch(
         `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}`
@@ -143,122 +135,94 @@ export const Home = ({ city, initialLocation, showInitialLocation }) => {
       }
       const data = await response.json();
       setWeatherData(data);
-      console.log('Printing weather data');
-      console.log(data);
     } catch (err) {
       setError(err.message);
-      setWeatherData(null); // Clear data on error
+      setWeatherData(null);
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_KEY]);
 
-
-  const fetchWeatherForcastData = async (lat, lon) => {
+  const fetchWeatherForcastData = useCallback(async (lat, lon) => {
     setLoading(true);
-    setError(null); // Reset error
+    setError(null);
     try {
       const response = await fetch(
-        // `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}`
         `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}`
       );
       if (!response.ok) {
-        throw new Error('Failed to fetch weather data');
+        throw new Error('Failed to fetch weather forecast data');
       }
       const data = await response.json();
       setWeatherForecastData(data);
-      console.log('Printing weather forcast data');
-      console.log(data);
     } catch (err) {
       setError(err.message);
-      setWeatherForecastData(null); // Clear data on error
+      setWeatherForecastData(null);
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_KEY]);
 
-
-
- 
   useEffect(() => {
     if (city) {
       fetchCoordinatesByCity(city);
     } else if (showInitialLocation && initialLocation) {
       setCoordinates(initialLocation);
     }
-  }, [city, initialLocation, showInitialLocation]);
+  }, [city, initialLocation, showInitialLocation, fetchCoordinatesByCity]);
 
   useEffect(() => {
     if (coordinates) {
-       const { lat, lon } = coordinates;
-       fetchPollutionData(lat, lon);
-       fetchForecastData(lat, lon);
-       fetchHistoricalData(lat, lon);
-       fetchWeatherData(lat, lon);
-       fetchWeatherForcastData(lat, lon);
+      const { lat, lon } = coordinates;
+      fetchPollutionData(lat, lon);
+      fetchForecastData(lat, lon);
+      fetchHistoricalData(lat, lon);
+      fetchWeatherData(lat, lon);
+      fetchWeatherForcastData(lat, lon);
     }
- }, [coordinates]);
- 
+  }, [
+    coordinates,
+    fetchPollutionData,
+    fetchForecastData,
+    fetchHistoricalData,
+    fetchWeatherData,
+    fetchWeatherForcastData
+  ]);
 
   useEffect(() => {
     if (pollutionData) {
       const aqi = pollutionData.list[0]?.main?.aqi;
       if (aqi) {
-        if (aqi >= 3) { 
+        if (aqi >= 3) {
           toast.error("Consider wearing a mask and stay at home");
         } else {
           toast.success("Weather condition is good");
         }
       }
     }
-  }, [pollutionData]);useEffect(() => {
-  let intervalId;
+  }, [pollutionData]);
 
-  if (coordinates) {
-    const { lat, lon } = coordinates;
-    fetchPollutionData(lat, lon);
-    fetchForecastData(lat, lon);
-    fetchHistoricalData(lat, lon);
-    fetchWeatherData(lat, lon);
-    fetchWeatherForcastData(lat, lon);
-
-    // Set interval to refetch every 10 minutes
-    intervalId = setInterval(() => {
-      fetchPollutionData(lat, lon);
-      fetchForecastData(lat, lon);
-      fetchHistoricalData(lat, lon);
-      fetchWeatherData(lat, lon);
-      fetchWeatherForcastData(lat, lon);
-    }, 600000); // 600000 ms = 10 minutes
-  }
-
-  return () => clearInterval(intervalId); // Cleanup interval on unmount or when coordinates change
-}, [coordinates]);
-
-
-useEffect(() => {
-  let intervalId;
-
-  if (coordinates) {
-    const { lat, lon } = coordinates;
-    fetchPollutionData(lat, lon);
-    fetchForecastData(lat, lon);
-    fetchHistoricalData(lat, lon);
-    fetchWeatherData(lat, lon);
-    fetchWeatherForcastData(lat, lon);
-
-    // Set interval to refetch every 10 minutes
-    intervalId = setInterval(() => {
-      fetchPollutionData(lat, lon);
-      fetchForecastData(lat, lon);
-      fetchHistoricalData(lat, lon);
-      fetchWeatherData(lat, lon);
-      fetchWeatherForcastData(lat, lon);
-    }, 600000); // 600000 ms = 10 minutes
-  }
-
-  return () => clearInterval(intervalId); // Cleanup interval on unmount or when coordinates change
-}, [coordinates]);
+  useEffect(() => {
+    let intervalId;
+    if (coordinates) {
+      const { lat, lon } = coordinates;
+      intervalId = setInterval(() => {
+        fetchPollutionData(lat, lon);
+        fetchForecastData(lat, lon);
+        fetchHistoricalData(lat, lon);
+        fetchWeatherData(lat, lon);
+        fetchWeatherForcastData(lat, lon);
+      }, 600000);
+    }
+    return () => clearInterval(intervalId);
+  }, [
+    coordinates,
+    fetchPollutionData,
+    fetchForecastData,
+    fetchHistoricalData,
+    fetchWeatherData,
+    fetchWeatherForcastData
+  ]);
 
 
   return (

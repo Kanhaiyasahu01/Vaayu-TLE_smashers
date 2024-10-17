@@ -8,19 +8,9 @@ import fairGif from "../assets/Fair.gif";
 import moderateGif from "../assets/Moderate.gif";
 import poorGif from "../assets/Poor.gif";
 import veryPoorGif from "../assets/very poor.gif";
-import pattern from "../assets/pattern.png";
 import { defaultOptions } from '../datas/tilt';
 import { Tilt } from 'react-tilt';
 import { getWeatherGif } from '../datas/suggestion';
-import { WiEarthquake } from 'react-icons/wi';
-import atmosphere from "../assets/weather/atmosphere.gif";
-import clearSky from "../assets/weather/clear-sky.gif"
-import clouds from "../assets/weather/clouds.gif"
-import defaultWeather from "../assets/weather/default-weather.gif"
-import drizzle from "../assets/weather/drizzle.gif"
-import rain from "../assets/weather/rain.gif"
-import snow from "../assets/weather/snow.gif"
-import thunderstorm from "../assets/weather/thunderstorm.gif"
 
 export const HeroSection = ({isAirSelected, setIsAirSelected,aqi, city, isCurrentLocation,weatherData }) => {  
   const aqiGifMap = {
