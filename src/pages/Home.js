@@ -37,7 +37,7 @@ export const Home = ({ city, initialLocation, showInitialLocation }) => {
     setError(null);
     try {
       const response = await fetch(
-        `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${API_KEY}`
+        `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${API_KEY}`
       );
       if (!response.ok) {
         throw new Error('Failed to fetch coordinates');
@@ -65,7 +65,7 @@ export const Home = ({ city, initialLocation, showInitialLocation }) => {
     setError(null);
     try {
       const response = await fetch(
-        `http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${API_KEY}`
+        `https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${API_KEY}`
       );
       if (!response.ok) {
         throw new Error('Failed to fetch air pollution data');
@@ -85,7 +85,7 @@ export const Home = ({ city, initialLocation, showInitialLocation }) => {
     setError(null);
     try {
       const response = await fetch(
-        `http://api.openweathermap.org/data/2.5/air_pollution/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}`
+        `https://api.openweathermap.org/data/2.5/air_pollution/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}`
       );
       if (!response.ok) {
         throw new Error('Failed to fetch air pollution forecast data');
@@ -108,7 +108,7 @@ export const Home = ({ city, initialLocation, showInitialLocation }) => {
       const startTimestamp = getOneDayAgoTimestamp();
 
       const response = await fetch(
-        `http://api.openweathermap.org/data/2.5/air_pollution/history?lat=${lat}&lon=${lon}&start=${startTimestamp}&end=${endTimestamp}&appid=${API_KEY}`
+        `https://api.openweathermap.org/data/2.5/air_pollution/history?lat=${lat}&lon=${lon}&start=${startTimestamp}&end=${endTimestamp}&appid=${API_KEY}`
       );
       if (!response.ok) {
         throw new Error('Failed to fetch historical air pollution data');
